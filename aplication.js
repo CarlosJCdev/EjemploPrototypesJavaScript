@@ -1,53 +1,31 @@
-//En un entorno de clientes podriamos tener muchos clientes
-//con la misma estrucutra defina, pero con información diferente
-//es la ventaja de los objetos.
-//Todos los objetos en javascrip  heredan sus funciones de un 
-//Proto
-
-//Un prototipe, nos ayuda a hacer mas legible y menos cargadas
-//de codigo y mas organizado nuestras funciones.
-//Tambien nos permite usar esas funciones, en otras partes
-//de código.
-
-
-function Alumnos(nombre, grado, calificaciones){
+//Cuando necesitamos hacer uso de una fuction, en otras areas de nuestro programa, código, etc
+//Lo mejor es heredar esa funcionalidad, en lugar de copear todo el código.
+function Alumnos(nombre, grado){
     this.nombre= nombre;
     this.grado= grado;
-    this.calificaciones= calificaciones;
+ 
 }
 //Ejemplo de prototipe
-//Nombre-Clase. prototype. NombreFuncion
-Alumnos.prototype.tipoEstudiante= function(){
-    //La función de tipoEstudiante, soló esta disponible para objetos de la clase Almunos
-    let tipo;
-    if(this.calificaciones >9){
-        tipo= 'Excelente';
-    }else if(this.calificaciones >7){
-        tipo='Regular';
-    }else{
-        tipo='Bajo';
-    }
-    return tipo;
-}
-//Segundo prototipo que imprime grado y nombre
 Alumnos.prototype.gradoClientenombre= function(){
-    return `Nombre: ${this.nombre}, Tu grado es: ${this.grado},
-    Tu calificación es: ${this.calificaciones}`;
+    return `Nombre: ${this.nombre}, Tu grado es: ${this.grado}`;
 }
-
-//Tercer prototipo que modifica la calificacion del alumno
-Alumnos.prototype.modificarCalificacion= function(modificacion){
-    return this.calificaciones -= modificacion;
-}
+const alumno1= new Alumnos('juan', 'primero');
+console.log(alumno1);
 
 
-const alumno1= new Alumnos('juan', 'tercero', 9);
-const alumno2= new Alumnos('carlos', 'quinto', 8);
-const alumno3= new Alumnos('mendoza', 'primero', 7);
 
-alumno2.modificarCalificacion(2);
+//En esta otra fuction, queremos usar parametro de la fuction Alumnos, por ello heredaremos
+function Escuela(nombre, grado, direccion, tipo){
+Alumnos.call(this, nombre, grado);
+this.direccion=direccion;
+this.tipo=tipo;
+} // Llamamos a la clase. metodo call y le pasamos los parametros que necesitamos
 
-console.log(alumno1.tipoEstudiante());
-console.log(alumno1.gradoClientenombre());
-console.log(alumno2.gradoClientenombre());
-console.log(alumno3.gradoClientenombre());
+//Como heredamos un prototype, para poer usarlo en otra fuction?
+Escuela.prototype= Object.create(Alumnos.prototype); //Esta linea debe ir arriba, por que si no se añadira primero la instancia y luego se añade el prototipo
+
+const escuel= new Escuela('Benito Juares','seis', 'Mexico','Musica',); //Instnacia
+console.log(escuel.gradoClientenombre());
+//De esta manera podemos crear protitypes en una clase principal "Alumnos"
+// e irlos heredando y la funcionalidad la podremos reutilizar, con información propia de la clase.
+
